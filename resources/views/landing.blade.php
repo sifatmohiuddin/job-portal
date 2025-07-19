@@ -35,7 +35,7 @@
     <section class="py-16 bg-white">
         <div class="max-w-6xl mx-auto px-4 text-center">
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                @foreach (['finance', 'IT', 'marketing', 'sales'] as $cat)
+                @foreach (['Finance', 'IT', 'marketing', 'sales'] as $cat)
                     <a href="{{ route('jobs.index', ['category' => ucfirst($cat)]) }}"
                         class="bg-gray-50 rounded-xl p-6 hover:bg-blue-50 transition block">
                         <img src="{{ asset("images/{$cat}.png") }}" alt="{{ ucfirst($cat) }}" class="h-14 mx-auto mb-4">
@@ -52,14 +52,25 @@
         <div class="max-w-6xl mx-auto px-4">
             <h2 class="text-2xl font-bold text-center mb-8">Featured Companies</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 justify-center items-center">
-                @foreach (['airbnb', 'google', 'netflix', 'spotify'] as $company)
-                    <div class="flex justify-center items-center p-4 bg-white rounded shadow-sm">
+                @php
+                    $featuredCompanies = [
+                        'fedex' => 74,
+                        'google' => 4,
+                        'netflix' => 89,
+                        'spotify' => 65,
+                    ];
+                @endphp
+
+                @foreach ($featuredCompanies as $company => $jobId)
+                    <a href="https://job.fwh.is/jobs/{{ $jobId }}" target="_blank"
+                        class="bg-gray-50 rounded-xl p-6 hover:bg-blue-50 transition block">
                         <img src="{{ asset("images/{$company}.png") }}" alt="{{ ucfirst($company) }}" class="h-20">
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </div>
     </section>
+
 
     <!-- HOW IT WORKS -->
     <section class="py-20 bg-white">
