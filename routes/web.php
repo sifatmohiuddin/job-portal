@@ -7,6 +7,9 @@ use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\MyJobApplicationController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\MyJobController;
+use App\Http\Controllers\HomeController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,40 +21,43 @@ use App\Http\Controllers\MyJobController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('', fn() => to_route('jobs.index'));
+
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::resource('jobs',  JobController::class)
-->only([ 'index', 'show' ]);
+    ->only(['index', 'show']);
 
 
 Route::get('login', fn() => to_route('auth.create'))->name('login');
 Route::resource('auth', AuthController::class)
-         ->only(['create', 'store']);
+    ->only(['create', 'store']);
 
 Route::delete('logout', fn() => to_route('auth.destroy'))->name('logout');
 Route::delete('auth', [AuthController::class, 'destroy'])
-         ->name('auth.destroy');
+    ->name('auth.destroy');
 
-         Route::middleware('auth')->group(function () {
-            Route::resource('job.application', JobApplicationController::class)
-                ->only(['create', 'store']);
-
-
-            Route::resource('my-job-applications', MyJobApplicationController::class)
-                ->only(['index', 'destroy']);
+Route::middleware('auth')->group(function () {
+    Route::resource('job.application', JobApplicationController::class)
+        ->only(['create', 'store']);
 
 
-            Route::resource('employer', EmployerController::class)
-         ->only(['create', 'store']);
+    Route::resource('my-job-applications', MyJobApplicationController::class)
+        ->only(['index', 'destroy']);
 
 
-         Route::middleware('employer')
-         ->resource('my-jobs', MyJobController::class);
+    Route::resource('employer', EmployerController::class)
+        ->only(['create', 'store']);
 
 
-
-         Route::get('/job-applications/{application}/download-cv', [JobApplicationController::class, 'downloadCV'])
-         ->name('job-applications.download-cv');
+    Route::middleware('employer')
+        ->resource('my-jobs', MyJobController::class);
 
 
 
-        });
+    Route::get('/job-applications/{application}/download-cv', [JobApplicationController::class, 'downloadCV'])
+        ->name('job-applications.download-cv');
+});
